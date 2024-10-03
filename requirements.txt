@@ -1,2 +1,6 @@
 MechanicalSoup==0.6.0
 notify2==0.3.1
+treelib==1.7.0
+graphviz==0.20.3
+Jinja2==3.1.4
+bigtree==0.21.1
