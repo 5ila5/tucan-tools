@@ -1,71 +1,98 @@
-<!DOCTYPE>
+<!DOCTYPE >
 <html>
-<head>
-<style>
-  .sticky {
-    position: sticky;
-    top: 0;
-    width: 100%;
-  }
-  .header{
-    background-color: white;
-  }
+  <head>
+    <style>
+ .sticky {
+        position: sticky;
+        top: 0;
+        width: 100%;
+      }
+      .header {
+        background-color: white;
+        z-index: 2;
+      }
 
-	table, th, td {
-				border: 1px solid black;
-	}
-  @media (prefers-color-scheme: dark) {
-    .header{
-      background-color: black;
-    }
-		table, th, td {
-				border: 1px solid gray;
-    }
-  }
-
-</style>
+      .path {
+        top: 45px; /* Adjust based on your header height */
+        width: 100%;
+        z-index: 5;
+        background-color: #f5f5f5;
+      }
 
 
+      table,
+      th,
+      td {
+        border: 1px solid black;
+      }
+      @media (prefers-color-scheme: dark) {
+        body{
+          background-color: #1a1a1a;
+        }
+        .header {
+          background-color: #1a1a1a;
+          color: #f5f5f5;
+        }
+        table,
+        th,
+        td {
+          border: 1px solid gray;
+          background-color: #1a1a1a;
+          color: #f5f5f5;
+        }
+      }
+    </style>
 </head>
-<table>
-  <thead class="header sticky">
-<tr>
-    <th>Nummer</th>
-    <th>Module Name</th>
-    <th>Path</th>
-    <th>CP</th>
-    <th>Dependency</th>
-    <th>Lehrinhalte</th>
-    <th>Qualifikationsziele / Lernergebnisse</th>
-    <th> Ergänzung zur Prüfungsform</th>
-    <th> Kurstermine</th>
-    <th> Sonstiges</th>
-</tr>
-</thead>
-<tbody>
-{% for module in modules %}
-<tr>
-  <td>{{ loop.index }}</td>
-  <td>{{ module.name | safe }} ({{ module.short_name | safe }})</td>
-  <td>{{ module.path | safe }}</td>
-  <td>{{ module.cp | safe }}</td>
-  <td>{{ module.dependency | safe }}</td>
-  <td>{{ module.lehrinhalte | safe}}</td>
-  <td>{{ module.qualifikationsziele | safe}}</td>
-  <td>{{ module.ergaenzung | safe}}</td> 
-  <td>
-    
-    {% if module.termine %} <details>  <summary> <b> Termine</b> </summary> {{ module.termine | safe}}  </details> {% endif %} </td>
+  <table>
+    <thead class="header sticky">
+      <tr>
+        <th>Nummer</th>
+        <th>Module Name</th>
+        <th>Path</th>
+        <th>CP</th>
+        <th>Dependency</th>
+        <th>Lehrinhalte</th>
+        <th>Qualifikationsziele / Lernergebnisse</th>
+        <th>Ergänzung zur Prüfungsform</th>
+        <th>Kurstermine</th>
+        <th>Sonstiges</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for module in modules %} {% if loop.previtem is not defined or
+      loop.previtem.path != module.path %}
+      <tr class="sticky path">
+        <th colspan="10">{{module.path | safe}}</th>
+      </tr>
+      {% endif %}
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td>{{ module.name | safe }} ({{ module.short_name | safe }})</td>
+        <td>{{ module.path | safe }}</td>
+        <td>{{ module.cp | safe }}</td>
+        <td>{{ module.dependency | safe }}</td>
+        <td>{{ module.lehrinhalte | safe}}</td>
+        <td>{{ module.qualifikationsziele | safe}}</td>
+        <td>{{ module.ergaenzung | safe}}</td>
+        <td>
+          {% if module.termine %}
+          <details>
+            <summary><b> Termine</b></summary>
+            {{ module.termine | safe}}
+          </details>
+          {% endif %}
+        </td>
 
-  <td> 
-    {% for sonstiges in module.sonstiges %}
-    <details> <summary> <b> {{ sonstiges.title }}</b> </summary> {{ sonstiges.details }}  </details>
-    {% endfor %}
-</td>
-
-</tr>
-{% endfor %}
-</tbody>
-</table>
+        <td>
+          {% for sonstiges in module.sonstiges %}
+          <details>
+            <summary><b> {{ sonstiges.title }}</b></summary>
+            {{ sonstiges.details }}
+          </details>
+          {% endfor %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 </html>
-
